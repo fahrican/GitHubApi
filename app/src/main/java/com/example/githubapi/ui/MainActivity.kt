@@ -22,7 +22,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
 
-    private val ENDPOINT_URL by lazy { "https://api.github.com/" }
+    private val BASE_URL by lazy { "https://api.github.com/" }
     private lateinit var gitHubRepositories: GitHubRepositories
     private lateinit var repositoriesList: ArrayList<Repository>
     private lateinit var repositoryAdapter: RepositoryAdapter
@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
     private fun generateRetrofitGsonBuilder(): Retrofit {
 
         return Retrofit.Builder()
-            .baseUrl(ENDPOINT_URL)
+            .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
@@ -74,7 +74,7 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
 
     /*private fun fetchForRepositories() {
         swipe_refresh.isRefreshing = true
-        repositoryObservable = gitHubRepositories.fetchAllPublicRepositories(ENDPOINT_URL)
+        repositoryObservable = gitHubRepositories.fetchAllPublicRepositories(BASE_URL)
         subscribeObservableOfRepository()
     }*/
 
