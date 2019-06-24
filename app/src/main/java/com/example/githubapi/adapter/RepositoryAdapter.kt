@@ -4,9 +4,9 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
 
-class GitHubRepositoryAdapter : RecyclerView.Adapter<GitHubRepositoryAdapter.GitHubRepositoryViewHolder>() {
+class RepositoryAdapter : RecyclerView.Adapter<RepositoryAdapter.RepositoryViewHolder>() {
 
-    override fun onBindViewHolder(p0: GitHubRepositoryViewHolder, p1: Int) {
+    override fun onBindViewHolder(p0: RepositoryViewHolder, p1: Int) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
@@ -14,11 +14,11 @@ class GitHubRepositoryAdapter : RecyclerView.Adapter<GitHubRepositoryAdapter.Git
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun onCreateViewHolder(p0: ViewGroup, p1: Int): GitHubRepositoryViewHolder {
+    override fun onCreateViewHolder(p0: ViewGroup, p1: Int): RepositoryViewHolder {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
 
 
-    inner class GitHubRepositoryViewHolder(private val view: View) : RecyclerView.ViewHolder(view)
+    inner class RepositoryViewHolder(private val view: View) : RecyclerView.ViewHolder(view)
 }
