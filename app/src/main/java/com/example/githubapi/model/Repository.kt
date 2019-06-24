@@ -1,6 +1,6 @@
 package com.example.githubapi.model
 
-data class GitHubRepository(
+data class Repository(
     val `private`: Boolean,
     val archive_url: String,
     val assignees_url: String,

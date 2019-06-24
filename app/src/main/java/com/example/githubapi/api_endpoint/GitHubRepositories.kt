@@ -1,11 +1,11 @@
 package com.example.githubapi.api_endpoint
 
-import com.example.githubapi.model.GitHubRepository
+import com.example.githubapi.model.Repository
 import io.reactivex.Observable
 import retrofit2.http.GET
 
 interface GitHubRepositories {
 
     @GET("repositories")
-    fun fetchAllPublicRepositories(): Observable<GitHubRepository>
+    fun fetchAllPublicRepositories(): Observable<Repository>
 }
