@@ -43,6 +43,11 @@ class RepositoryAdapter(
         repositoryViewHolder.fullName.text = repository.full_name
     }
 
+    fun setRepositories(repositories: ArrayList<Repository>){
+        repositoryList = repositories
+        notifyDataSetChanged()
+    }
+
     inner class RepositoryViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
 
         val cardView: CardView by lazy { view.card_view }
