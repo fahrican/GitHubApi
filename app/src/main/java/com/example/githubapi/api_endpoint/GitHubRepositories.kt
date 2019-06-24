@@ -8,7 +8,4 @@ interface GitHubRepositories {
 
     @GET("repositories")
     fun fetchAllPublicRepositories(): Observable<ArrayList<Repository>>
-
-  /*  @GET("repositories")
-    fun fetchAllPublicRepositories(): Call<List<Repository>>*/
 }

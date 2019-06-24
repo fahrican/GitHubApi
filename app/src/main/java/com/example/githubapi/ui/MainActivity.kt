@@ -79,29 +79,6 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
         subscribeObservableOfRepository()
     }
 
-    /*private fun fetchForRepositories() {
-        swipe_refresh.isRefreshing = true
-        val call: Call<List<Repository>> = gitHubRepositories.fetchAllPublicRepositories()
-        call.enqueue(createRepositoriesQuery())
-    }
-
-    private fun createRepositoriesQuery(): Callback<List<Repository>> {
-        return object : Callback<List<Repository>> {
-
-            override fun onFailure(call: Call<List<Repository>>, t: Throwable) {
-                empty_text.text = "Something went wrong!\n${t.message}"
-            }
-
-            override fun onResponse(call: Call<List<Repository>>, response: Response<List<Repository>>) {
-                if (!response.isSuccessful) {
-                    empty_text.text = "code: ${response.code()}"
-                    return
-                }
-                showArticlesOnRecyclerView(response)
-            }
-        }
-    }*/
-
     private fun subscribeObservableOfRepository() {
         repositoriesList.clear()
         compositeDisposable.add(
@@ -129,7 +106,6 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
         }
     }
 
-
     private fun showArticlesOnRecyclerView() {
         if (repositoriesList.size > 0) {
             empty_text.visibility = View.GONE
@@ -144,24 +120,4 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
         }
         swipe_refresh.isRefreshing = false
     }
-
-   /* private fun showArticlesOnRecyclerView(response: Response<List<Repository>>) {
-        val queryRepositories: List<Repository>? = response.body()
-        if (queryRepositories != null) {
-            repositoriesList.clear()
-            repositoriesList.addAll(queryRepositories)
-            if (repositoriesList.size > 0) {
-                empty_text.visibility = View.GONE
-                retry_fetch_button.visibility = View.GONE
-                repositoryAdapter.setRepositories(repositoriesList)
-            } else {
-                empty_text.visibility = View.VISIBLE
-                retry_fetch_button.visibility = View.VISIBLE
-                retry_fetch_button.setOnClickListener { fetchForRepositories() }
-            }
-        } else {
-            empty_text.append("queryRepositories is null!!")
-        }
-        swipe_refresh.isRefreshing = false
-    }*/
 }
