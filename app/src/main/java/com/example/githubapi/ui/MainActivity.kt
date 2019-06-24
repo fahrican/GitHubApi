@@ -5,13 +5,18 @@ import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
+import android.view.View
 import com.example.githubapi.R
 import com.example.githubapi.adapter.RepositoryAdapter
 import com.example.githubapi.api_endpoint.GitHubRepositories
 import com.example.githubapi.model.Repository
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.observers.DisposableObserver
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -61,5 +66,54 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
+    }
+
+    private fun fetchForRepositories() {
+        swipe_refresh.isRefreshing = true
+        repositoryObservable = gitHubRepositories.fetchAllPublicRepositories()
+        subscribeObservableOfRepository()
+    }
+
+    private fun subscribeObservableOfRepository() {
+        repositoriesList.clear()
+        compositeDisposable.add(
+            repositoryObservable.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(createRepositoryObserver())
+        )
+    }
+
+    private fun createRepositoryObserver(): DisposableObserver<Repository> {
+        return object : DisposableObserver<Repository>() {
+            override fun onNext(article: Repository) {
+                if (!repositoriesList.contains(article)) {
+                    repositoriesList.add(article)
+                }
+            }
+
+            override fun onComplete() {
+                showArticlesOnRecyclerView()
+            }
+
+            override fun onError(e: Throwable) {
+                Log.e("createRepoObserver", "Repository error: ${e.message}")
+            }
+        }
+    }
+
+
+    private fun showArticlesOnRecyclerView() {
+        if (repositoriesList.size > 0) {
+            empty_text.visibility = View.GONE
+            retry_fetch_button.visibility = View.GONE
+            recycler_view.visibility = View.VISIBLE
+            repositoryAdapter.setRepositories(repositoriesList)
+        } else {
+            recycler_view.visibility = View.GONE
+            empty_text.visibility = View.VISIBLE
+            retry_fetch_button.visibility = View.VISIBLE
+            retry_fetch_button.setOnClickListener { fetchForRepositories() }
+        }
+        swipe_refresh.isRefreshing = false
     }
 }
