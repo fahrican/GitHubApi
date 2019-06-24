@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.View
 import com.example.githubapi.R
 import com.example.githubapi.adapter.RepositoryAdapter
@@ -12,11 +13,11 @@ import com.example.githubapi.api_endpoint.GitHubRepositories
 import com.example.githubapi.model.Repository
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.observers.DisposableObserver
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -27,7 +28,7 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
     private lateinit var repositoriesList: ArrayList<Repository>
     private lateinit var repositoryAdapter: RepositoryAdapter
     // RxJava related fields
-    private lateinit var repositoryObservable: Observable<List<Repository>>
+    private lateinit var repositoryObservable: Observable<ArrayList<Repository>>
     private lateinit var compositeDisposable: CompositeDisposable
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,13 +73,13 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
             .build()
     }
 
-    /*private fun fetchForRepositories() {
-        swipe_refresh.isRefreshing = true
-        repositoryObservable = gitHubRepositories.fetchAllPublicRepositories(BASE_URL)
-        subscribeObservableOfRepository()
-    }*/
-
     private fun fetchForRepositories() {
+        swipe_refresh.isRefreshing = true
+        repositoryObservable = gitHubRepositories.fetchAllPublicRepositories()
+        subscribeObservableOfRepository()
+    }
+
+    /*private fun fetchForRepositories() {
         swipe_refresh.isRefreshing = true
         val call: Call<List<Repository>> = gitHubRepositories.fetchAllPublicRepositories()
         call.enqueue(createRepositoriesQuery())
@@ -99,9 +100,9 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
                 showArticlesOnRecyclerView(response)
             }
         }
-    }
+    }*/
 
-   /* private fun subscribeObservableOfRepository() {
+    private fun subscribeObservableOfRepository() {
         repositoriesList.clear()
         compositeDisposable.add(
             repositoryObservable.subscribeOn(Schedulers.io())
@@ -110,11 +111,11 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
         )
     }
 
-    private fun createRepositoryObserver(): DisposableObserver<<List>Repository> {
-        return object : DisposableObserver<Repository>() {
-            override fun onNext(article: Repository) {
-                if (!repositoriesList.contains(article)) {
-                    repositoriesList.add(article)
+    private fun createRepositoryObserver(): DisposableObserver<ArrayList<Repository>> {
+        return object : DisposableObserver<ArrayList<Repository>>() {
+            override fun onNext(repos: ArrayList<Repository>) {
+                if (!repositoriesList.equals(repos)) {
+                    repositoriesList = repos
                 }
             }
 
@@ -142,9 +143,9 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
             retry_fetch_button.setOnClickListener { fetchForRepositories() }
         }
         swipe_refresh.isRefreshing = false
-    }*/
+    }
 
-    private fun showArticlesOnRecyclerView(response: Response<List<Repository>>) {
+   /* private fun showArticlesOnRecyclerView(response: Response<List<Repository>>) {
         val queryRepositories: List<Repository>? = response.body()
         if (queryRepositories != null) {
             repositoriesList.clear()
@@ -162,5 +163,5 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
             empty_text.append("queryRepositories is null!!")
         }
         swipe_refresh.isRefreshing = false
-    }
+    }*/
 }
