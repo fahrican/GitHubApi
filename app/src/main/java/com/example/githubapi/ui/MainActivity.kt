@@ -50,13 +50,18 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
         recycler_view.adapter = repositoryAdapter
     }
 
+    override fun onStart() {
+        super.onStart()
+        fetchForRepositories()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         compositeDisposable.clear()
     }
 
     override fun onRefresh() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        fetchForRepositories()
     }
 
     private fun generateRetrofitGsonBuilder(): Retrofit {
