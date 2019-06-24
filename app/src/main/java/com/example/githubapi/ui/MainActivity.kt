@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.View
 import com.example.githubapi.R
 import com.example.githubapi.adapter.RepositoryAdapter
@@ -13,22 +12,22 @@ import com.example.githubapi.api_endpoint.GitHubRepositories
 import com.example.githubapi.model.Repository
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.observers.DisposableObserver
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
 
-    private val ENDPOINT_URL by lazy { "https://api.github.com/" }
+    private val ENDPOINT_URL by lazy { "https://api.github.com/repositories/" }
     private lateinit var gitHubRepositories: GitHubRepositories
     private lateinit var repositoriesList: ArrayList<Repository>
     private lateinit var repositoryAdapter: RepositoryAdapter
     // RxJava related fields
-    private lateinit var repositoryObservable: Observable<Repository>
+    private lateinit var repositoryObservable: Observable<List<Repository>>
     private lateinit var compositeDisposable: CompositeDisposable
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,13 +72,36 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
             .build()
     }
 
+    /*private fun fetchForRepositories() {
+        swipe_refresh.isRefreshing = true
+        repositoryObservable = gitHubRepositories.fetchAllPublicRepositories(ENDPOINT_URL)
+        subscribeObservableOfRepository()
+    }*/
+
     private fun fetchForRepositories() {
         swipe_refresh.isRefreshing = true
-        repositoryObservable = gitHubRepositories.fetchAllPublicRepositories()
-        subscribeObservableOfRepository()
+        val call: Call<List<Repository>> = gitHubRepositories.fetchAllPublicRepositories(ENDPOINT_URL)
+        call.enqueue(createRepositoriesQuery())
     }
 
-    private fun subscribeObservableOfRepository() {
+    private fun createRepositoriesQuery(): Callback<List<Repository>> {
+        return object : Callback<List<Repository>> {
+
+            override fun onFailure(call: Call<List<Repository>>, t: Throwable) {
+                empty_text.text = "Something went wrong!\n${t.message}"
+            }
+
+            override fun onResponse(call: Call<List<Repository>>, response: Response<List<Repository>>) {
+                if (!response.isSuccessful) {
+                    empty_text.text = "code: ${response.code()}"
+                    return
+                }
+                showArticlesOnRecyclerView(response)
+            }
+        }
+    }
+
+   /* private fun subscribeObservableOfRepository() {
         repositoriesList.clear()
         compositeDisposable.add(
             repositoryObservable.subscribeOn(Schedulers.io())
@@ -88,7 +110,7 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
         )
     }
 
-    private fun createRepositoryObserver(): DisposableObserver<Repository> {
+    private fun createRepositoryObserver(): DisposableObserver<<List>Repository> {
         return object : DisposableObserver<Repository>() {
             override fun onNext(article: Repository) {
                 if (!repositoriesList.contains(article)) {
@@ -118,6 +140,26 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
             empty_text.visibility = View.VISIBLE
             retry_fetch_button.visibility = View.VISIBLE
             retry_fetch_button.setOnClickListener { fetchForRepositories() }
+        }
+        swipe_refresh.isRefreshing = false
+    }*/
+
+    private fun showArticlesOnRecyclerView(response: Response<List<Repository>>) {
+        val queryRepositories: List<Repository>? = response.body()
+        if (queryRepositories != null) {
+            repositoriesList.clear()
+            repositoriesList.addAll(queryRepositories)
+            if (repositoriesList.size > 0) {
+                empty_text.visibility = View.GONE
+                retry_fetch_button.visibility = View.GONE
+                repositoryAdapter.setRepositories(repositoriesList)
+            } else {
+                empty_text.visibility = View.VISIBLE
+                retry_fetch_button.visibility = View.VISIBLE
+                retry_fetch_button.setOnClickListener { fetchForRepositories() }
+            }
+        } else {
+            empty_text.append("queryRepositories is null!!")
         }
         swipe_refresh.isRefreshing = false
     }
