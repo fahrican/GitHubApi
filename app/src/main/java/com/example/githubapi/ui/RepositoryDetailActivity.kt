@@ -1,5 +1,6 @@
 package com.example.githubapi.ui
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -32,9 +33,10 @@ class RepositoryDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_repository_detail)
 
+        fullNameFromIntent = intent.getStringExtra(RepositoryAdapter.FULL_NAME)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
-        fullNameFromIntent = intent.getStringExtra(RepositoryAdapter.FULL_NAME)
+        supportActionBar?.title = fullNameFromIntent
         containsLoginAndName = ArrayList()
         containsLoginAndName = fullNameFromIntent.split("/")
         val retrofit: Retrofit = generateRetrofitGsonBuilder()
@@ -45,6 +47,9 @@ class RepositoryDetailActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         fetchForRepositoryDetails()
+        contributorsButton.setOnClickListener {
+            setIntentForContributors()
+        }
     }
 
     override fun onDestroy() {
@@ -67,7 +72,8 @@ class RepositoryDetailActivity : AppCompatActivity() {
     }
 
     private fun fetchForRepositoryDetails() {
-        repositoryDetailsObservable = gitHubRepositories.fetchRepositoryDetails(containsLoginAndName.get(0), containsLoginAndName.get(1))
+        repositoryDetailsObservable =
+            gitHubRepositories.fetchRepositoryDetails(containsLoginAndName.get(0), containsLoginAndName.get(1))
         subscribeObservableRepositoryDetails()
     }
 
@@ -84,7 +90,7 @@ class RepositoryDetailActivity : AppCompatActivity() {
         return object : DisposableObserver<RepositoryDetail>() {
 
             override fun onNext(repoDetail: RepositoryDetail) {
-                    repositoryDetail = repoDetail
+                repositoryDetail = repoDetail
             }
 
             override fun onComplete() {
@@ -102,5 +108,11 @@ class RepositoryDetailActivity : AppCompatActivity() {
         sizeValue.text = repositoryDetail?.size.toString()
         stargazersCountValue.text = repositoryDetail?.stargazers_count.toString()
         forksCountValue.text = repositoryDetail?.forks_count.toString()
+    }
+
+    private fun setIntentForContributors() {
+        val contributorsIntent = Intent(this, ContributorActivity::class.java)
+        contributorsIntent.putExtra(RepositoryAdapter.FULL_NAME, fullNameFromIntent)
+        startActivity(contributorsIntent)
     }
 }
