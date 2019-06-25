@@ -44,6 +44,7 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
         repositoryAdapter = RepositoryAdapter(repositoriesList)
         compositeDisposable = CompositeDisposable()
         recycler_view.setHasFixedSize(true)
+        recycler_view.setItemViewCacheSize(25)
         //TODO: set number of items to 25 per page
         recycler_view.layoutManager = LinearLayoutManager(this)
         recycler_view.itemAnimator = DefaultItemAnimator()
@@ -108,6 +109,7 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
 
     private fun showArticlesOnRecyclerView() {
         if (repositoriesList.size > 0) {
+            swipe_refresh.isRefreshing = false
             empty_text.visibility = View.GONE
             retry_fetch_button.visibility = View.GONE
             recycler_view.visibility = View.VISIBLE
@@ -118,6 +120,5 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
             retry_fetch_button.visibility = View.VISIBLE
             retry_fetch_button.setOnClickListener { fetchForRepositories() }
         }
-        swipe_refresh.isRefreshing = false
     }
 }
