@@ -1,6 +1,7 @@
 package com.example.githubapi.adapter
 
 import android.content.Context
+import android.content.Intent
 import android.support.v7.widget.CardView
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -10,6 +11,7 @@ import android.widget.TextView
 import android.widget.Toast
 import com.example.githubapi.R
 import com.example.githubapi.model.Repository
+import com.example.githubapi.ui.RepositoryDetailActivity
 import kotlinx.android.synthetic.main.item_repository.view.*
 
 class RepositoryAdapter(
@@ -33,8 +35,7 @@ class RepositoryAdapter(
         val repository: Repository = repositoryList.get(itemIndex)
         setPropertiesRepositoryViewHolder(repositoryViewHolder, repository)
         repositoryViewHolder.cardView.setOnClickListener {
-            //setIntentForNewsDetail(repository)
-            Toast.makeText(viewGroupContext, "Click listener", Toast.LENGTH_LONG).show()
+            setIntentForRepositoryDetail(repository)
         }
     }
 
@@ -48,8 +49,14 @@ class RepositoryAdapter(
         notifyDataSetChanged()
     }
 
+    private fun setIntentForRepositoryDetail(repository: Repository){
+        val repositoryDetailIntent = Intent(viewGroupContext, RepositoryDetailActivity::class.java)
+        repositoryDetailIntent.putExtra(FULL_NAME, repository.full_name)
+        viewGroupContext.startActivity(repositoryDetailIntent)
+    }
+
     companion object {
-        //TODO: size, stargazers, forks count and the list of the contributors of this repo
+        val FULL_NAME = "full_name"
     }
 
     inner class RepositoryViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
