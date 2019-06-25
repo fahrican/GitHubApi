@@ -23,7 +23,7 @@ class RepositoryDetailActivity : AppCompatActivity() {
     private lateinit var gitHubRepositories: GitHubRepositories
     private var repositoryDetail: RepositoryDetail? = null
     private lateinit var fullNameFromIntent: String
-    private lateinit var myTest: List<String>
+    private lateinit var containsLoginAndName: List<String>
     // RxJava related fields
     private lateinit var repositoryDetailsObservable: Observable<RepositoryDetail>
     private lateinit var compositeDisposable: CompositeDisposable
@@ -35,8 +35,8 @@ class RepositoryDetailActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
         fullNameFromIntent = intent.getStringExtra(RepositoryAdapter.FULL_NAME)
-        myTest = ArrayList()
-        myTest = fullNameFromIntent.split("/")
+        containsLoginAndName = ArrayList()
+        containsLoginAndName = fullNameFromIntent.split("/")
         val retrofit: Retrofit = generateRetrofitGsonBuilder()
         gitHubRepositories = retrofit.create(GitHubRepositories::class.java)
         compositeDisposable = CompositeDisposable()
@@ -67,7 +67,7 @@ class RepositoryDetailActivity : AppCompatActivity() {
     }
 
     private fun fetchForRepositoryDetails() {
-        repositoryDetailsObservable = gitHubRepositories.fetchRepositoryDetails(myTest.get(0), myTest.get(1))
+        repositoryDetailsObservable = gitHubRepositories.fetchRepositoryDetails(containsLoginAndName.get(0), containsLoginAndName.get(1))
         subscribeObservableRepositoryDetails()
     }
 
