@@ -62,7 +62,7 @@
             app:layout_constraintTop_toBottomOf="@id/stargazersCountTextView"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_margin="16dp"
-            android:text="stargazers_count:"
+            android:text="forks_count:"
             android:textSize="20sp"/>
 
     <TextView
