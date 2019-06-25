@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
         compositeDisposable = CompositeDisposable()
         recycler_view.setHasFixedSize(true)
         recycler_view.setItemViewCacheSize(25)
-        //TODO: set number of items to 25 per page
+        //TODO: BASE_URL and generateRetrofitGsonBuilder() in separate class for all Activities
         recycler_view.layoutManager = LinearLayoutManager(this)
         recycler_view.itemAnimator = DefaultItemAnimator()
         recycler_view.adapter = repositoryAdapter
