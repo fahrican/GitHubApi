@@ -11,5 +11,12 @@ class ContributorActivity : AppCompatActivity() {
         setContentView(R.layout.activity_contributor)
 
         supportActionBar?.title = "List of all Contributors"
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 }
