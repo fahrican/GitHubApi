@@ -48,6 +48,10 @@ class RepositoryAdapter(
         notifyDataSetChanged()
     }
 
+    companion object {
+        //TODO: size, stargazers, forks count and the list of the contributors of this repo
+    }
+
     inner class RepositoryViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
 
         val cardView: CardView by lazy { view.card_view }
