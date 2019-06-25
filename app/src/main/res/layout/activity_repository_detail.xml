@@ -8,14 +8,83 @@
         tools:context=".ui.RepositoryDetailActivity">
 
     <TextView
-            android:id="@+id/full_name"
+            android:id="@+id/sizeTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:text="test"
+            android:layout_margin="16dp"
+            android:text="size:"
             android:textSize="20sp"/>
+
+    <TextView
+            android:id="@+id/sizeValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/sizeTextView"
+            app:layout_constraintBaseline_toBaselineOf="@id/sizeTextView"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="8dp"
+            android:text="0"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"/>
+
+    <TextView
+            android:id="@+id/stargazersCountTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/sizeTextView"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_margin="16dp"
+            android:text="stargazers_count:"
+            android:textSize="20sp"/>
+
+    <TextView
+            android:id="@+id/stargazersCountValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/stargazersCountTextView"
+            app:layout_constraintBaseline_toBaselineOf="@id/stargazersCountTextView"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="8dp"
+            android:text="0"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"/>
+
+    <TextView
+            android:id="@+id/forksCountTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/stargazersCountTextView"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_margin="16dp"
+            android:text="stargazers_count:"
+            android:textSize="20sp"/>
+
+    <TextView
+            android:id="@+id/forksCountValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/forksCountTextView"
+            app:layout_constraintBaseline_toBaselineOf="@id/forksCountTextView"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="8dp"
+            android:text="0"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"/>
+
+    <Button
+            android:id="@+id/contributorsButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/forksCountValue"
+            android:layout_margin="16dp"
+            android:text="see all contributors"/>
 
 </android.support.constraint.ConstraintLayout>
