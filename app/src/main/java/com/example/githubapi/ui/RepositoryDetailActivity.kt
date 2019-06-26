@@ -59,8 +59,10 @@ class RepositoryDetailActivity : AppCompatActivity() {
 
     private fun fetchForRepositoryDetails() {
         val gitHubRepositories: GitHubRepositories = RetrofitInstance.getEndPoint()
-        repositoryDetailsObservable =
-            gitHubRepositories.fetchRepositoryDetails(containsLoginAndName.get(0), containsLoginAndName.get(1))
+        repositoryDetailsObservable = gitHubRepositories.fetchRepositoryDetails(
+            containsLoginAndName.get(0),
+            containsLoginAndName.get(1)
+        )
         subscribeObservableRepositoryDetails()
     }
 
