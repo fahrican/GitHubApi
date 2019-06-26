@@ -31,9 +31,9 @@ class RepositoryDetailActivity : AppCompatActivity() {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
-        supportActionBar?.title = fullNameFromIntent
         //Contains full name in format {login}/{name}
         fullNameFromIntent = intent.getStringExtra(RepositoryAdapter.FULL_NAME)
+        supportActionBar?.title = fullNameFromIntent
         containsLoginAndName = ArrayList()
         //To get {login}/{name} as {login} at index 0 and {name} at index 1
         containsLoginAndName = fullNameFromIntent.split("/")
