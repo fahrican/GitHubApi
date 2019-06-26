@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import com.example.githubapi.R
 import com.example.githubapi.model.Repository
 import com.example.githubapi.ui.RepositoryDetailActivity
@@ -61,7 +60,7 @@ class RepositoryAdapter(
 
     inner class RepositoryViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
 
-        val cardView: CardView by lazy { view.card_view }
+        val cardView: CardView by lazy { view.mainCardView }
         val name: TextView by lazy { view.repo_name }
         val fullName: TextView by lazy { view.repo_full_name }
     }
