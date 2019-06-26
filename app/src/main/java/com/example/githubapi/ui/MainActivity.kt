@@ -98,14 +98,14 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
 
         if (repositoriesList.size > 0) {
             mainEmptyText.visibility = View.GONE
-            retry_fetch_button.visibility = View.GONE
+            mainretryFetchButton.visibility = View.GONE
             mainRecyclerView.visibility = View.VISIBLE
             repositoryAdapter.setRepositories(repositoriesList)
         } else {
             mainRecyclerView.visibility = View.GONE
             mainEmptyText.visibility = View.VISIBLE
-            retry_fetch_button.visibility = View.VISIBLE
-            retry_fetch_button.setOnClickListener { fetchForRepositories() }
+            mainretryFetchButton.visibility = View.VISIBLE
+            mainretryFetchButton.setOnClickListener { fetchForRepositories() }
         }
     }
 }
