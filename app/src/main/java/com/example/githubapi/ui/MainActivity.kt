@@ -33,9 +33,11 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
 
         mainSwipeRefresh.setOnRefreshListener(this)
         mainSwipeRefresh.setColorSchemeResources(R.color.colorAccent)
+        //Declare class fields
         repositoriesList = ArrayList()
         repositoryAdapter = RepositoryAdapter(repositoriesList)
         compositeDisposable = CompositeDisposable()
+        //Set properties for RecyclerView to display list of repos
         mainRecyclerView.setHasFixedSize(true)
         mainRecyclerView.setItemViewCacheSize(25)
         mainRecyclerView.layoutManager = LinearLayoutManager(this)
@@ -92,7 +94,7 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     private fun showArticlesOnRecyclerView() {
-
+        //Loading circle should disappear before list of repos is shown
         mainSwipeRefresh.isRefreshing = false
 
         if (repositoriesList.size > 0) {
