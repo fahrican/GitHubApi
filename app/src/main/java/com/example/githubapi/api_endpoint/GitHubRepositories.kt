@@ -13,8 +13,14 @@ interface GitHubRepositories {
     fun fetchAllPublicRepositories(): Observable<ArrayList<Repository>>
 
     @GET("repos/{login}/{name}")
-    fun fetchRepositoryDetails(@Path("login") login: String, @Path("name") name: String): Observable<RepositoryDetail>
+    fun fetchRepositoryDetails(
+        @Path("login") login: String,
+        @Path("name") name: String
+    ): Observable<RepositoryDetail>
 
     @GET("repos/{login}/{name}/contributors")
-    fun fetchContributorsList(@Path("login") login: String, @Path("name") name: String): Observable<Contributor>
+    fun fetchContributorsList(
+        @Path("login") login: String,
+        @Path("name") name: String
+    ): Observable<Contributor>
 }
