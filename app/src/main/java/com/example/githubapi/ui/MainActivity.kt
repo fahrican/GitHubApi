@@ -93,8 +93,10 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     private fun showArticlesOnRecyclerView() {
+
+        mainSwipeRefresh.isRefreshing = false
+
         if (repositoriesList.size > 0) {
-            mainSwipeRefresh.isRefreshing = false
             empty_text.visibility = View.GONE
             retry_fetch_button.visibility = View.GONE
             recycler_view.visibility = View.VISIBLE
