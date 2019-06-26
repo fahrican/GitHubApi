@@ -14,10 +14,12 @@ import com.example.githubapi.model.Contributor
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_contributor.view.*
 
-class ContributorAdapter(private var contributorsList: ArrayList<Contributor>) : RecyclerView.Adapter<ContributorAdapter.ContributorViewHolder>() {
+class ContributorAdapter(
+    private var contributorsList: ArrayList<Contributor>
+) : RecyclerView.Adapter<ContributorAdapter.ContributorViewHolder>() {
 
+    //Store context in field for handling clicks on item.
     private lateinit var viewGroupContext: Context
-
 
     override fun getItemCount(): Int {
         return contributorsList.size
@@ -37,7 +39,7 @@ class ContributorAdapter(private var contributorsList: ArrayList<Contributor>) :
         }
     }
 
-    private fun setPropertiesForViewHolder(contributor: Contributor, contributorViewHolder: ContributorViewHolder){
+    private fun setPropertiesForViewHolder(contributor: Contributor, contributorViewHolder: ContributorViewHolder) {
         Picasso.get()
             .load(contributor.avatar_url)
             .centerCrop()
@@ -47,7 +49,7 @@ class ContributorAdapter(private var contributorsList: ArrayList<Contributor>) :
         contributorViewHolder.login.text = contributor.login
     }
 
-    fun setContributors(contributors: ArrayList<Contributor>){
+    fun setContributors(contributors: ArrayList<Contributor>) {
         contributorsList = contributors
         notifyDataSetChanged()
     }
