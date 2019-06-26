@@ -36,14 +36,15 @@ class ContributorActivity : AppCompatActivity() {
         supportActionBar?.title = "List of all Contributors"
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
+        //Contains full name in format {login}/{name}
         fullNameFromIntent = intent.getStringExtra(RepositoryAdapter.FULL_NAME)
         containsLoginAndName = ArrayList()
-        //Get {login}/{repository_name}
+        //To get {login}/{name} as {login} at index 0 and {name} at index 1
         containsLoginAndName = fullNameFromIntent.split("/")
         contributorsList = ArrayList()
         contributorAdapter = ContributorAdapter(contributorsList)
         compositeDisposable = CompositeDisposable()
-        //list of contributors
+        //Set properties for RecyclerView to display list of contributors
         contributorRecyclerView.setHasFixedSize(true)
         contributorRecyclerView.layoutManager = GridLayoutManager(this, 2)
         contributorRecyclerView.itemAnimator = DefaultItemAnimator()
