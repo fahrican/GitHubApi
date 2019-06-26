@@ -11,6 +11,7 @@ class ContributorAdapter {
     inner class ContributorViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
 
         val cardView: CardView by lazy { view.contributorCardView }
+        val avatarUrl: ImageView by lazy { view.contributorAvatar }
         val login: TextView by lazy { view.loginTextView }
     }
 }
