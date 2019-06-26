@@ -22,7 +22,7 @@
                 android:layout_marginStart="0dp"/>
 
         <TextView
-                android:id="@+id/repo_name"
+                android:id="@+id/mainRepoName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/black"
@@ -41,7 +41,7 @@
                 android:textColor="@android:color/black"
                 android:text="mojombo/grit"
                 android:textSize="12sp"
-                app:layout_constraintTop_toBottomOf="@id/repo_name"
+                app:layout_constraintTop_toBottomOf="@id/mainRepoName"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"

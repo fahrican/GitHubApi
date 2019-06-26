@@ -61,7 +61,7 @@ class RepositoryAdapter(
     inner class RepositoryViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
 
         val cardView: CardView by lazy { view.mainCardView }
-        val name: TextView by lazy { view.repo_name }
+        val name: TextView by lazy { view.mainRepoName }
         val fullName: TextView by lazy { view.repo_full_name }
     }
 }
