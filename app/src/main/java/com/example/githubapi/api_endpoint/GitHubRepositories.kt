@@ -1,5 +1,6 @@
 package com.example.githubapi.api_endpoint
 
+import com.example.githubapi.model.Contributor
 import com.example.githubapi.model.Repository
 import com.example.githubapi.model.RepositoryDetail
 import io.reactivex.Observable
@@ -13,4 +14,7 @@ interface GitHubRepositories {
 
     @GET("repos/{login}/{name}")
     fun fetchRepositoryDetails(@Path("login") login: String, @Path("name") name: String): Observable<RepositoryDetail>
+
+    @GET("repos/{login}/{name}/contributors")
+    fun fetchContributorsList(@Path("login") login: String, @Path("name") name: String): Observable<Contributor>
 }
