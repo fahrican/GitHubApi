@@ -37,11 +37,11 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
         repositoriesList = ArrayList()
         repositoryAdapter = RepositoryAdapter(repositoriesList)
         compositeDisposable = CompositeDisposable()
-        recycler_view.setHasFixedSize(true)
-        recycler_view.setItemViewCacheSize(25)
-        recycler_view.layoutManager = LinearLayoutManager(this)
-        recycler_view.itemAnimator = DefaultItemAnimator()
-        recycler_view.adapter = repositoryAdapter
+        mainRecyclerView.setHasFixedSize(true)
+        mainRecyclerView.setItemViewCacheSize(25)
+        mainRecyclerView.layoutManager = LinearLayoutManager(this)
+        mainRecyclerView.itemAnimator = DefaultItemAnimator()
+        mainRecyclerView.adapter = repositoryAdapter
     }
 
     override fun onStart() {
@@ -99,10 +99,10 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
         if (repositoriesList.size > 0) {
             empty_text.visibility = View.GONE
             retry_fetch_button.visibility = View.GONE
-            recycler_view.visibility = View.VISIBLE
+            mainRecyclerView.visibility = View.VISIBLE
             repositoryAdapter.setRepositories(repositoriesList)
         } else {
-            recycler_view.visibility = View.GONE
+            mainRecyclerView.visibility = View.GONE
             empty_text.visibility = View.VISIBLE
             retry_fetch_button.visibility = View.VISIBLE
             retry_fetch_button.setOnClickListener { fetchForRepositories() }
