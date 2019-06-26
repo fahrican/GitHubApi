@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import com.example.githubapi.R
 import com.example.githubapi.model.Contributor
 import com.squareup.picasso.Picasso
@@ -31,6 +32,9 @@ class ContributorAdapter(private var contributorsList: ArrayList<Contributor>) :
     override fun onBindViewHolder(contributorViewHolder: ContributorViewHolder, itemIndex: Int) {
         val contributor: Contributor = contributorsList.get(itemIndex)
         setPropertiesForViewHolder(contributor, contributorViewHolder)
+        contributorViewHolder.cardView.setOnClickListener {
+            Toast.makeText(viewGroupContext, "node_id: ${contributor.node_id}", Toast.LENGTH_LONG).show()
+        }
     }
 
     private fun setPropertiesForViewHolder(contributor: Contributor, contributorViewHolder: ContributorViewHolder){
