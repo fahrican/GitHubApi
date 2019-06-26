@@ -39,6 +39,8 @@ class ContributorAdapter(private var contributorsList: ArrayList<Contributor>) :
             .centerCrop()
             .fit()
             .into(contributorViewHolder.avatarUrl)
+
+        contributorViewHolder.login.text = contributor.login
     }
 
     fun setContributors(contributors: ArrayList<Contributor>){
