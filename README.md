@@ -1,3 +1,8 @@
 # GitHubApi
-#test test
-<img src ="app/src/main/res/drawable/github_icon.png" />
+#My implementation of the GitHub V3 API
+<br />
+<img src ="app/src/main/res/drawable/all_public_repositories.png" />
+<br />
+<img src ="app/src/main/res/drawable/avatar_image_and_login.png" />
+<br />
+<img src ="app/src/main/res/drawable/repository_details.png" />
