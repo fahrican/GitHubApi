@@ -29,10 +29,11 @@ class RepositoryDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_repository_detail)
 
-        fullNameFromIntent = intent.getStringExtra(RepositoryAdapter.FULL_NAME)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
         supportActionBar?.title = fullNameFromIntent
+        //Contains full name in format {login}/{name}
+        fullNameFromIntent = intent.getStringExtra(RepositoryAdapter.FULL_NAME)
         containsLoginAndName = ArrayList()
         //To get {login}/{name} as {login} at index 0 and {name} at index 1
         containsLoginAndName = fullNameFromIntent.split("/")
