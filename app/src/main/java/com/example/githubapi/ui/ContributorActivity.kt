@@ -3,7 +3,7 @@ package com.example.githubapi.ui
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.DefaultItemAnimator
-import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.GridLayoutManager
 import android.util.Log
 import android.view.View
 import com.example.githubapi.R
@@ -52,7 +52,7 @@ class ContributorActivity : AppCompatActivity() {
         compositeDisposable = CompositeDisposable()
         //list of contributors
         contributorRecyclerView.setHasFixedSize(true)
-        contributorRecyclerView.layoutManager = LinearLayoutManager(this)
+        contributorRecyclerView.layoutManager = GridLayoutManager(this, 2)
         contributorRecyclerView.itemAnimator = DefaultItemAnimator()
         contributorRecyclerView.adapter = contributorAdapter
     }
