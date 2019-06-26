@@ -68,8 +68,10 @@ class ContributorActivity : AppCompatActivity() {
 
     private fun fetchForContributors() {
         val gitHubRepositories: GitHubRepositories = RetrofitInstance.getEndPoint()
-        repositoryObservable =
-            gitHubRepositories.fetchContributorsList(containsLoginAndName.get(0), containsLoginAndName.get(1))
+        repositoryObservable = gitHubRepositories.fetchContributorsList(
+            containsLoginAndName.get(0),
+            containsLoginAndName.get(1)
+        )
         subscribeObservableOfContributor()
     }
 
