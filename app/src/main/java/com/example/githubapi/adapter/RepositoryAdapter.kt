@@ -62,6 +62,6 @@ class RepositoryAdapter(
 
         val cardView: CardView by lazy { view.mainCardView }
         val name: TextView by lazy { view.mainRepoName }
-        val fullName: TextView by lazy { view.repo_full_name }
+        val fullName: TextView by lazy { view.mainRepoFullName }
     }
 }
