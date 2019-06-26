@@ -7,20 +7,17 @@ import android.util.Log
 import com.example.githubapi.R
 import com.example.githubapi.adapter.RepositoryAdapter
 import com.example.githubapi.api_endpoint.GitHubRepositories
+import com.example.githubapi.api_endpoint.RetrofitInstance
 import com.example.githubapi.model.RepositoryDetail
-import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_repository_detail.*
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class RepositoryDetailActivity : AppCompatActivity() {
 
-    private val BASE_URL by lazy { "https://api.github.com/" }
     private lateinit var gitHubRepositories: GitHubRepositories
     private var repositoryDetail: RepositoryDetail? = null
     private lateinit var fullNameFromIntent: String
@@ -39,8 +36,6 @@ class RepositoryDetailActivity : AppCompatActivity() {
         supportActionBar?.title = fullNameFromIntent
         containsLoginAndName = ArrayList()
         containsLoginAndName = fullNameFromIntent.split("/")
-        val retrofit: Retrofit = generateRetrofitGsonBuilder()
-        gitHubRepositories = retrofit.create(GitHubRepositories::class.java)
         compositeDisposable = CompositeDisposable()
     }
 
@@ -62,16 +57,8 @@ class RepositoryDetailActivity : AppCompatActivity() {
         return true
     }
 
-    private fun generateRetrofitGsonBuilder(): Retrofit {
-
-        return Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .build()
-    }
-
     private fun fetchForRepositoryDetails() {
+        gitHubRepositories = RetrofitInstance.getEndPoint()
         repositoryDetailsObservable =
             gitHubRepositories.fetchRepositoryDetails(containsLoginAndName.get(0), containsLoginAndName.get(1))
         subscribeObservableRepositoryDetails()

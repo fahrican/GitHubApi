@@ -10,20 +10,17 @@ import android.view.View
 import com.example.githubapi.R
 import com.example.githubapi.adapter.RepositoryAdapter
 import com.example.githubapi.api_endpoint.GitHubRepositories
+import com.example.githubapi.api_endpoint.RetrofitInstance
 import com.example.githubapi.model.Repository
-import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
 
-    private val BASE_URL by lazy { "https://api.github.com/" }
     private lateinit var gitHubRepositories: GitHubRepositories
     private lateinit var repositoriesList: ArrayList<Repository>
     private lateinit var repositoryAdapter: RepositoryAdapter
@@ -35,9 +32,6 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        //Network request
-        val retrofit: Retrofit = generateRetrofitGsonBuilder()
-        gitHubRepositories = retrofit.create(GitHubRepositories::class.java)
         swipe_refresh.setOnRefreshListener(this)
         swipe_refresh.setColorSchemeResources(R.color.colorAccent)
         repositoriesList = ArrayList()
@@ -45,9 +39,6 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
         compositeDisposable = CompositeDisposable()
         recycler_view.setHasFixedSize(true)
         recycler_view.setItemViewCacheSize(25)
-        /*TODO: BASE_URL and generateRetrofitGsonBuilder() in separate class for all Activities
-         * extract styles from views of activity_repository_detail.xml
-         */
         recycler_view.layoutManager = LinearLayoutManager(this)
         recycler_view.itemAnimator = DefaultItemAnimator()
         recycler_view.adapter = repositoryAdapter
@@ -67,17 +58,9 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
         fetchForRepositories()
     }
 
-    private fun generateRetrofitGsonBuilder(): Retrofit {
-
-        return Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .build()
-    }
-
     private fun fetchForRepositories() {
         swipe_refresh.isRefreshing = true
+        gitHubRepositories = RetrofitInstance.getEndPoint()
         repositoryObservable = gitHubRepositories.fetchAllPublicRepositories()
         subscribeObservableOfRepository()
     }

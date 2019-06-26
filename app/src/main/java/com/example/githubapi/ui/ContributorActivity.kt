@@ -10,20 +10,17 @@ import com.example.githubapi.R
 import com.example.githubapi.adapter.ContributorAdapter
 import com.example.githubapi.adapter.RepositoryAdapter
 import com.example.githubapi.api_endpoint.GitHubRepositories
+import com.example.githubapi.api_endpoint.RetrofitInstance
 import com.example.githubapi.model.Contributor
-import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_contributor.*
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class ContributorActivity : AppCompatActivity() {
 
-    private val BASE_URL by lazy { "https://api.github.com/" }
     private lateinit var gitHubRepositories: GitHubRepositories
     private lateinit var contributorsList: ArrayList<Contributor>
     private lateinit var contributorAdapter: ContributorAdapter
@@ -41,12 +38,9 @@ class ContributorActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
         fullNameFromIntent = intent.getStringExtra(RepositoryAdapter.FULL_NAME)
-        //Network request
-        val retrofit: Retrofit = generateRetrofitGsonBuilder()
         containsLoginAndName = ArrayList()
         //Get {login}/{repository_name}
         containsLoginAndName = fullNameFromIntent.split("/")
-        gitHubRepositories = retrofit.create(GitHubRepositories::class.java)
         contributorsList = ArrayList()
         contributorAdapter = ContributorAdapter(contributorsList)
         compositeDisposable = CompositeDisposable()
@@ -73,6 +67,7 @@ class ContributorActivity : AppCompatActivity() {
     }
 
     private fun fetchForContributors() {
+        gitHubRepositories = RetrofitInstance.getEndPoint()
         repositoryObservable =
             gitHubRepositories.fetchContributorsList(containsLoginAndName.get(0), containsLoginAndName.get(1))
         subscribeObservableOfContributor()
@@ -115,14 +110,5 @@ class ContributorActivity : AppCompatActivity() {
         } else {
             contributorRecyclerView.visibility = View.GONE
         }
-    }
-
-    private fun generateRetrofitGsonBuilder(): Retrofit {
-
-        return Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .build()
     }
 }
