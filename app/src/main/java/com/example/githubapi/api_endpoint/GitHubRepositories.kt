@@ -22,5 +22,5 @@ interface GitHubRepositories {
     fun fetchContributorsList(
         @Path("login") login: String,
         @Path("name") name: String
-    ): Observable<Contributor>
+    ): Observable<ArrayList<Contributor>>
 }
