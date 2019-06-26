@@ -21,7 +21,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
 
-    private lateinit var gitHubRepositories: GitHubRepositories
     private lateinit var repositoriesList: ArrayList<Repository>
     private lateinit var repositoryAdapter: RepositoryAdapter
     // RxJava related fields
@@ -60,7 +59,7 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
 
     private fun fetchForRepositories() {
         mainSwipeRefresh.isRefreshing = true
-        gitHubRepositories = RetrofitInstance.getEndPoint()
+        val gitHubRepositories: GitHubRepositories = RetrofitInstance.getEndPoint()
         repositoryObservable = gitHubRepositories.fetchAllPublicRepositories()
         subscribeObservableOfRepository()
     }

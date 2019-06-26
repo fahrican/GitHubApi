@@ -18,7 +18,6 @@ import kotlinx.android.synthetic.main.activity_repository_detail.*
 
 class RepositoryDetailActivity : AppCompatActivity() {
 
-    private lateinit var gitHubRepositories: GitHubRepositories
     private var repositoryDetail: RepositoryDetail? = null
     private lateinit var fullNameFromIntent: String
     private lateinit var containsLoginAndName: List<String>
@@ -58,7 +57,7 @@ class RepositoryDetailActivity : AppCompatActivity() {
     }
 
     private fun fetchForRepositoryDetails() {
-        gitHubRepositories = RetrofitInstance.getEndPoint()
+        val gitHubRepositories: GitHubRepositories = RetrofitInstance.getEndPoint()
         repositoryDetailsObservable =
             gitHubRepositories.fetchRepositoryDetails(containsLoginAndName.get(0), containsLoginAndName.get(1))
         subscribeObservableRepositoryDetails()

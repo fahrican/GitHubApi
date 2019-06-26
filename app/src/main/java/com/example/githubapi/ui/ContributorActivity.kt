@@ -21,7 +21,6 @@ import kotlinx.android.synthetic.main.activity_contributor.*
 
 class ContributorActivity : AppCompatActivity() {
 
-    private lateinit var gitHubRepositories: GitHubRepositories
     private lateinit var contributorsList: ArrayList<Contributor>
     private lateinit var contributorAdapter: ContributorAdapter
     private lateinit var fullNameFromIntent: String
@@ -67,7 +66,7 @@ class ContributorActivity : AppCompatActivity() {
     }
 
     private fun fetchForContributors() {
-        gitHubRepositories = RetrofitInstance.getEndPoint()
+        val gitHubRepositories: GitHubRepositories = RetrofitInstance.getEndPoint()
         repositoryObservable =
             gitHubRepositories.fetchContributorsList(containsLoginAndName.get(0), containsLoginAndName.get(1))
         subscribeObservableOfContributor()
