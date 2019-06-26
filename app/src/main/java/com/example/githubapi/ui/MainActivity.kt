@@ -32,8 +32,8 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        swipe_refresh.setOnRefreshListener(this)
-        swipe_refresh.setColorSchemeResources(R.color.colorAccent)
+        mainSwipeRefresh.setOnRefreshListener(this)
+        mainSwipeRefresh.setColorSchemeResources(R.color.colorAccent)
         repositoriesList = ArrayList()
         repositoryAdapter = RepositoryAdapter(repositoriesList)
         compositeDisposable = CompositeDisposable()
@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     private fun fetchForRepositories() {
-        swipe_refresh.isRefreshing = true
+        mainSwipeRefresh.isRefreshing = true
         gitHubRepositories = RetrofitInstance.getEndPoint()
         repositoryObservable = gitHubRepositories.fetchAllPublicRepositories()
         subscribeObservableOfRepository()
@@ -94,7 +94,7 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
 
     private fun showArticlesOnRecyclerView() {
         if (repositoriesList.size > 0) {
-            swipe_refresh.isRefreshing = false
+            mainSwipeRefresh.isRefreshing = false
             empty_text.visibility = View.GONE
             retry_fetch_button.visibility = View.GONE
             recycler_view.visibility = View.VISIBLE
