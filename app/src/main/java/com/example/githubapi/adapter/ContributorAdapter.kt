@@ -41,6 +41,11 @@ class ContributorAdapter(private var contributorsList: ArrayList<Contributor>) :
             .into(contributorViewHolder.avatarUrl)
     }
 
+    fun setContributors(contributors: ArrayList<Contributor>){
+        contributorsList = contributors
+        notifyDataSetChanged()
+    }
+
     inner class ContributorViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
 
         val cardView: CardView by lazy { view.contributorCardView }
