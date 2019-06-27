@@ -38,7 +38,6 @@ dependencies {
     // Needed for HTTP requests and log results to console
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.14.0'
     // Display image from URL
     implementation 'com.squareup.picasso:picasso:2.71828'
     // Needed for reactive programming
