@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.View
 import com.example.githubapi.R
@@ -19,7 +20,7 @@ import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
+class MainActivity : AppCompatActivity() {
 
     private lateinit var repositoriesList: ArrayList<Repository>
     private lateinit var repositoryAdapter: RepositoryAdapter
@@ -27,22 +28,26 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
     private lateinit var repositoryObservable: Observable<ArrayList<Repository>>
     private lateinit var compositeDisposable: CompositeDisposable
 
+    private lateinit var layoutManager: RecyclerView.LayoutManager
+    var visibleItemCount = 0
+    var pastVisibleItemCount = 0
+    var loading = false
+    var pageId = 1
+    var totalItemCount = 0
+    private val PAGE_SIZE = 10
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        mainSwipeRefresh.setOnRefreshListener(this)
-        mainSwipeRefresh.setColorSchemeResources(R.color.colorAccent)
         //Declare class fields
         repositoriesList = ArrayList()
-        repositoryAdapter = RepositoryAdapter(repositoriesList)
         compositeDisposable = CompositeDisposable()
         //Set properties for RecyclerView to display list of repos
+        layoutManager = LinearLayoutManager(this)
+        mainRecyclerView.layoutManager = layoutManager
         mainRecyclerView.setHasFixedSize(true)
-        mainRecyclerView.setItemViewCacheSize(25)
-        mainRecyclerView.layoutManager = LinearLayoutManager(this)
-        mainRecyclerView.itemAnimator = DefaultItemAnimator()
-        mainRecyclerView.adapter = repositoryAdapter
     }
 
     override fun onStart() {
@@ -55,12 +60,8 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
         compositeDisposable.clear()
     }
 
-    override fun onRefresh() {
-        fetchForRepositories()
-    }
-
     private fun fetchForRepositories() {
-        mainSwipeRefresh.isRefreshing = true
+        progressBar.visibility = View.VISIBLE
         val gitHubRepositories: GitHubRepositories = RetrofitInstance.getEndPoint()
         repositoryObservable = gitHubRepositories.fetchAllPublicRepositories()
         subscribeObservableOfRepository()
@@ -76,15 +77,14 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     private fun createRepositoryObserver(): DisposableObserver<ArrayList<Repository>> {
+        var list = ArrayList<Repository>()
         return object : DisposableObserver<ArrayList<Repository>>() {
             override fun onNext(repos: ArrayList<Repository>) {
-                if (!repositoriesList.equals(repos)) {
-                    repositoriesList = repos
-                }
+                    list = repos
             }
 
             override fun onComplete() {
-                showArticlesOnRecyclerView()
+                showArticlesOnRecyclerView(list)
             }
 
             override fun onError(e: Throwable) {
@@ -93,20 +93,58 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
         }
     }
 
-    private fun showArticlesOnRecyclerView() {
+    private fun showArticlesOnRecyclerView(repos: ArrayList<Repository>) {
         //Loading circle should disappear before list of repos is shown
-        mainSwipeRefresh.isRefreshing = false
 
-        if (repositoriesList.size > 0) {
+        if (repos.size > 0) {
+
+            progressBar.visibility = View.GONE
+            loading = true
+            setUpAdapter(repos)
+
+
             mainEmptyText.visibility = View.GONE
             mainretryFetchButton.visibility = View.GONE
             mainRecyclerView.visibility = View.VISIBLE
-            repositoryAdapter.setRepositories(repositoriesList)
         } else {
             mainRecyclerView.visibility = View.GONE
+            progressBar.visibility = View.GONE
             mainEmptyText.visibility = View.VISIBLE
             mainretryFetchButton.visibility = View.VISIBLE
             mainretryFetchButton.setOnClickListener { fetchForRepositories() }
         }
+    }
+
+    private fun setUpAdapter(repos: ArrayList<Repository>) {
+        if (repositoriesList.size == 0){
+            repositoriesList = repos
+            repositoryAdapter = RepositoryAdapter(repositoriesList)
+            mainRecyclerView.adapter = repositoryAdapter
+        }
+        else {
+            var currentPosition = (mainRecyclerView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
+            repositoriesList.addAll(repos)
+            repositoryAdapter.notifyDataSetChanged()
+            mainRecyclerView.scrollToPosition(currentPosition)
+        }
+        mainRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+
+                if (dy > 0){
+                    visibleItemCount = layoutManager.childCount
+                    totalItemCount = layoutManager.itemCount
+                    pastVisibleItemCount = (mainRecyclerView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
+                    if (loading){
+                        if ((visibleItemCount + pastVisibleItemCount) >= 8){
+                            loading = false
+                            pageId++
+                            fetchForRepositories()
+                        }
+                    }
+                }
+            }
+
+        })
     }
 }
