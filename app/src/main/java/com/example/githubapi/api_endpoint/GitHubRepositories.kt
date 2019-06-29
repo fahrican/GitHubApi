@@ -4,13 +4,17 @@ import com.example.githubapi.model.Contributor
 import com.example.githubapi.model.Repository
 import com.example.githubapi.model.RepositoryDetail
 import io.reactivex.Observable
+import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
 
 interface GitHubRepositories {
 
+   /* @GET("repositories")
+    fun fetchAllPublicRepositories(): Observable<ArrayList<Repository>>*/
+
     @GET("repositories")
-    fun fetchAllPublicRepositories(): Observable<ArrayList<Repository>>
+    fun fetchAllPublicRepositories(): Call<ArrayList<Repository>>
 
     @GET("repos/{login}/{name}")
     fun fetchRepositoryDetails(
