@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.View
 import com.example.githubapi.R
@@ -26,6 +27,15 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
     // RxJava related fields
     private lateinit var repositoryObservable: Observable<ArrayList<Repository>>
     private lateinit var compositeDisposable: CompositeDisposable
+    //Items for OnScrollListener()
+    private lateinit var fieldLayoutManager: RecyclerView.LayoutManager
+    var visibleItemCount = 0
+    var pastVisibleItemCount = 0
+    var loading = false
+    var pageId = 1
+    var totalItemCount = 0
+    private val PAGE_SIZE = 25
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,9 +50,9 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
         //Set properties for RecyclerView to display list of repos
         mainRecyclerView.setHasFixedSize(true)
         mainRecyclerView.setItemViewCacheSize(25)
-        mainRecyclerView.layoutManager = LinearLayoutManager(this)
+        fieldLayoutManager = LinearLayoutManager(this)
+        mainRecyclerView.layoutManager = fieldLayoutManager
         mainRecyclerView.itemAnimator = DefaultItemAnimator()
-        mainRecyclerView.adapter = repositoryAdapter
     }
 
     override fun onStart() {
@@ -78,8 +88,10 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
     private fun createRepositoryObserver(): DisposableObserver<ArrayList<Repository>> {
         return object : DisposableObserver<ArrayList<Repository>>() {
             override fun onNext(repos: ArrayList<Repository>) {
-                if (!repositoriesList.equals(repos)) {
-                    repositoriesList = repos
+                repos.forEach {
+                    if (!repositoriesList.contains(it)){
+                        repositoriesList.add(it)
+                    }
                 }
             }
 
@@ -98,15 +110,44 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
         mainSwipeRefresh.isRefreshing = false
 
         if (repositoriesList.size > 0) {
+            repositoryAdapter.setRepositories(repositoriesList)
+            mainRecyclerView.adapter = repositoryAdapter
             mainEmptyText.visibility = View.GONE
             mainretryFetchButton.visibility = View.GONE
             mainRecyclerView.visibility = View.VISIBLE
-            repositoryAdapter.setRepositories(repositoriesList)
+            loading = true
+            mainRecyclerView.addOnScrollListener(checkNumberOfScrolledItems())
         } else {
             mainRecyclerView.visibility = View.GONE
             mainEmptyText.visibility = View.VISIBLE
             mainretryFetchButton.visibility = View.VISIBLE
             mainretryFetchButton.setOnClickListener { fetchForRepositories() }
+        }
+    }
+
+    private fun checkNumberOfScrolledItems(): RecyclerView.OnScrollListener {
+        return object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                if (dy > 0) {
+                    progressBar.visibility = View.VISIBLE
+                    visibleItemCount = fieldLayoutManager.childCount
+                    totalItemCount = fieldLayoutManager.itemCount
+                    pastVisibleItemCount =
+                        (mainRecyclerView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
+                    if (loading) {
+                        if ((visibleItemCount + pastVisibleItemCount) >= 8 && totalItemCount >= PAGE_SIZE) {
+                            loading = false
+                            pageId++
+                            Log.v("page", "${pageId}")
+                            progressBar.visibility = View.GONE
+                            Log.v("before crash", "${pageId}")
+                            fetchForRepositories()
+                            Log.v("after crash", "${pageId}")
+                        }
+                    }
+                }
+            }
+
         }
     }
 }
