@@ -163,7 +163,11 @@ class MainActivity : AppCompatActivity() {
             mainRecyclerView.adapter = repositoryAdapter
         } else {
             val currentPosition = (mainRecyclerView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
-            repositoriesList.addAll(repos)
+            repos.forEach {
+                if (!repositoriesList.contains(it)) {
+                    repositoriesList.add(it)
+                }
+            }
             repositoryAdapter.notifyDataSetChanged()
             mainRecyclerView.scrollToPosition(currentPosition)
         }
@@ -189,7 +193,6 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
-
         }
     }
 }
