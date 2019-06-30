@@ -88,7 +88,7 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
         return object : DisposableObserver<ArrayList<Repository>>() {
             override fun onNext(repos: ArrayList<Repository>) {
                 repos.forEach {
-                    if (!repositoriesList.contains(it)){
+                    if (!repositoriesList.contains(it)) {
                         repositoriesList.add(it)
                     }
                 }
@@ -143,10 +143,11 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
                             fetchForRepositories()
                             Log.v("after crash", "${pageId}")
                         }
+                    } else {
+                        loading = false
                     }
                 }
             }
-
         }
     }
 }
