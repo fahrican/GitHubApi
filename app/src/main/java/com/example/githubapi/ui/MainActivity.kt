@@ -20,7 +20,7 @@ import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
+class MainActivity : AppCompatActivity() {
 
     private lateinit var repositoriesList: ArrayList<Repository>
     private lateinit var repositoryAdapter: RepositoryAdapter
@@ -41,8 +41,6 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        mainSwipeRefresh.setOnRefreshListener(this)
-        mainSwipeRefresh.setColorSchemeResources(R.color.colorAccent)
         //Declare class fields
         repositoriesList = ArrayList()
         repositoryAdapter = RepositoryAdapter(repositoriesList)
@@ -65,12 +63,8 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
         compositeDisposable.clear()
     }
 
-    override fun onRefresh() {
-        fetchForRepositories()
-    }
 
     private fun fetchForRepositories() {
-        mainSwipeRefresh.isRefreshing = true
         val gitHubRepositories: GitHubRepositories = RetrofitInstance.getEndPoint()
         repositoryObservable = gitHubRepositories.fetchAllPublicRepositories()
         subscribeObservableOfRepository()
@@ -106,7 +100,6 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
 
     private fun showArticlesOnRecyclerView() {
         //Loading circle should disappear before list of repos is shown
-        mainSwipeRefresh.isRefreshing = false
 
         if (repositoriesList.size > 0) {
             repositoryAdapter.setRepositories(repositoriesList)
