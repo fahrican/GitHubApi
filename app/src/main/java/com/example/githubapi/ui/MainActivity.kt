@@ -34,7 +34,6 @@ class MainActivity : AppCompatActivity() {
     var totalItemCount = 0
     private val PAGE_SIZE = 25
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -57,62 +56,6 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
         compositeDisposable.clear()
     }
-/*
-    private fun fetchForRepositories() {
-        progressBar.visibility = View.VISIBLE
-        val gitHubRepositories: GitHubRepositories = RetrofitInstance.getEndPoint()
-        repositoryObservable = gitHubRepositories.fetchAllPublicRepositories()
-        subscribeObservableOfRepository()
-    }
-
-    private fun subscribeObservableOfRepository() {
-        repositoriesList.clear()
-        compositeDisposable.add(
-            repositoryObservable.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(createRepositoryObserver())
-        )
-    }
-
-    private fun createRepositoryObserver(): DisposableObserver<ArrayList<Repository>> {
-        var list = ArrayList<Repository>()
-        return object : DisposableObserver<ArrayList<Repository>>() {
-            override fun onNext(repos: ArrayList<Repository>) {
-                    list = repos
-            }
-
-            override fun onComplete() {
-                showArticlesOnRecyclerView(list)
-            }
-
-            override fun onError(e: Throwable) {
-                Log.e("createRepoObserver", "Repository error: ${e.message}")
-            }
-        }
-    }
-
-    private fun showArticlesOnRecyclerView(repos: ArrayList<Repository>) {
-        //Loading circle should disappear before list of repos is shown
-
-        if (repos.size > 0) {
-
-            progressBar.visibility = View.GONE
-            loading = true
-            setUpAdapter(repos)
-
-
-            mainEmptyText.visibility = View.GONE
-            mainretryFetchButton.visibility = View.GONE
-            mainRecyclerView.visibility = View.VISIBLE
-        } else {
-            mainRecyclerView.visibility = View.GONE
-            progressBar.visibility = View.GONE
-            mainEmptyText.visibility = View.VISIBLE
-            mainretryFetchButton.visibility = View.VISIBLE
-            mainretryFetchButton.setOnClickListener { fetchForRepositories() }
-        }
-    }
-*/
 
     private fun fetchAllPublicRepositories() {
         progressBar.visibility = View.VISIBLE
