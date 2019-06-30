@@ -6,6 +6,7 @@ import com.example.githubapi.model.RepositoryDetail
 import io.reactivex.Observable
 import retrofit2.Call
 import retrofit2.http.GET
+import retrofit2.http.Headers
 import retrofit2.http.Path
 
 interface GitHubRepositories {
@@ -13,6 +14,7 @@ interface GitHubRepositories {
    /* @GET("repositories")
     fun fetchAllPublicRepositories(): Observable<ArrayList<Repository>>*/
 
+    @Headers("username: fahrican")
     @GET("repositories")
     fun fetchAllPublicRepositories(): Call<ArrayList<Repository>>
 
