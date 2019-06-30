@@ -77,7 +77,6 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     private fun subscribeObservableOfRepository() {
-        repositoriesList.clear()
         compositeDisposable.add(
             repositoryObservable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
